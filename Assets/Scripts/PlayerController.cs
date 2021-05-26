@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 1f;
     private float verticalRotStore;
     private Vector2 mouseInput;
+    public bool invertLook;
 
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         
     }
 
@@ -26,7 +28,17 @@ public class PlayerController : MonoBehaviour
             transform.rotation.eulerAngles.y + mouseInput.x, 
             transform.rotation.eulerAngles.z);
 
-        verticalRotStore += mouseInput.y;
+        if(invertLook)
+        {
+            verticalRotStore += mouseInput.y;
+        }
+        else
+        {
+            verticalRotStore -= mouseInput.y;
+        }
+        
+
+
         verticalRotStore = Mathf.Clamp(verticalRotStore, -60, 60f);
         
         viewPoint.rotation = Quaternion.Euler(

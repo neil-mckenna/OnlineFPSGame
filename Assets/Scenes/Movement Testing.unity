@@ -1299,6 +1299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewPoint: {fileID: 298600396}
   mouseSensitivity: 1
+  invertLook: 0
 --- !u!1 &1691198221
 GameObject:
   m_ObjectHideFlags: 0
