@@ -18,11 +18,14 @@ public class PlayerController : MonoBehaviour
 
     public CharacterController charCon;
 
+    // Camera
+    private Camera cam;
+
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        
+        cam = Camera.main;
     }
 
     // Update is called once per frame
@@ -71,6 +74,12 @@ public class PlayerController : MonoBehaviour
 
         charCon.Move(movement * Time.deltaTime);
 
-        
+    }
+
+    private void LateUpdate() 
+    {
+        cam.transform.position = viewPoint.transform.position;
+        cam.transform.rotation = viewPoint.transform.rotation;
+
     }
 }
