@@ -11,10 +11,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseInput;
     public bool invertLook;
 
+    // movement
+    public float moveSpeed = 5f;
+    private Vector3 moveDirection, movement;
+
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
         
     }
 
@@ -37,14 +41,23 @@ public class PlayerController : MonoBehaviour
             verticalRotStore -= mouseInput.y;
         }
         
-
-
         verticalRotStore = Mathf.Clamp(verticalRotStore, -60, 60f);
         
         viewPoint.rotation = Quaternion.Euler(
             verticalRotStore,
             viewPoint.rotation.eulerAngles.y,
             viewPoint.rotation.eulerAngles.z);
+
+        // WASD
+        moveDirection = new Vector3(
+            Input.GetAxisRaw("Horizontal"),
+            0f,
+            Input.GetAxisRaw("Vertical")
+        );
+
+        movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized; 
+
+        transform.position += movement * moveSpeed * Time.deltaTime;
 
         
     }
