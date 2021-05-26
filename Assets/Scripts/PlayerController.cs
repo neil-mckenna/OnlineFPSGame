@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     private Vector3 moveDirection, movement;
 
+    public CharacterController charCon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
         movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized; 
 
-        transform.position += movement * moveSpeed * Time.deltaTime;
+        charCon.Move(movement * moveSpeed * Time.deltaTime);
 
         
     }
