@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     // Camera
     private Camera cam;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +72,20 @@ public class PlayerController : MonoBehaviour
             activeMoveSpeed = moveSpeed;
         }
 
-        movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized * activeMoveSpeed; 
+        // local var 
+        float yVel = movement.y;
+
+        // normalisez move speed in 4 directions
+        movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized * activeMoveSpeed;
+        movement.y = yVel;
+
+        if(!charCon.isGrounded)
+        {
+            //movement.y =  yVel;
+            movement.y = 0f;
+        }
+
+        movement.y += Physics.gravity.y * Time.deltaTime; 
 
         charCon.Move(movement * Time.deltaTime);
 
