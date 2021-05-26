@@ -1314,7 +1314,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -1400,6 +1400,7 @@ MonoBehaviour:
   mouseSensitivity: 1.5
   invertLook: 0
   moveSpeed: 5
+  runSpeed: 12
   charCon: {fileID: 1648566307}
 --- !u!1 &1691198221
 GameObject:

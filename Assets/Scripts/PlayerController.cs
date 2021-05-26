@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     public bool invertLook;
 
     // movement
-    public float moveSpeed = 5f;
+    public float moveSpeed = 5f, runSpeed = 8f;
+    private float activeMoveSpeed; 
     private Vector3 moveDirection, movement;
 
     public CharacterController charCon;
@@ -57,9 +58,18 @@ public class PlayerController : MonoBehaviour
             Input.GetAxisRaw("Vertical")
         );
 
-        movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized; 
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            activeMoveSpeed = runSpeed;
+        }
+        else
+        {
+            activeMoveSpeed = moveSpeed;
+        }
 
-        charCon.Move(movement * moveSpeed * Time.deltaTime);
+        movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized * activeMoveSpeed; 
+
+        charCon.Move(movement * Time.deltaTime);
 
         
     }
