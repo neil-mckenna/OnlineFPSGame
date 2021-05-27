@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletImpact;
     public float bulletImpactSurvialTime = 5f;
     public float bulletZFightingOffset = 0.3f;
-    public float timeBetweenShots = 0.1f;
+    //public float timeBetweenShots = 0.1f;
     private float shotCounter;
 
-    public float maxHeatValue = 10f, heatPerShot = 1f, coolRate = 4f, overheatCoolRate = 5f;
+    public float maxHeatValue = 10f, /*heatPerShot = 1f,*/ coolRate = 4f, overheatCoolRate = 5f;
     private float heatCounter;
     private bool overheated;
 
@@ -147,13 +147,12 @@ public class PlayerController : MonoBehaviour
         if(!overheated)
         {
 
-            // if(Input.GetMouseButtonDown(0))
-            // {
-            //     Shoot();
+            if(Input.GetMouseButtonDown(0))
+            {
+                Shoot();
+            }
 
-            // }
-
-            if(Input.GetMouseButton(0))
+            if(Input.GetMouseButton(0) && allGuns[selectedGun].isAutomatic)
             {
                 shotCounter -= Time.deltaTime;
 
@@ -227,15 +226,15 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("We hit " + hit.collider.gameObject.name);
 
-            GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point /* + (hit.normal * bulletZFightingOffset)*/, Quaternion.LookRotation(hit.normal, Vector3.up));
+            GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point + (hit.normal * bulletZFightingOffset), Quaternion.LookRotation(hit.normal, Vector3.up));
 
             Destroy(bulletImpactObject, bulletImpactSurvialTime);
 
         }
 
-        shotCounter = timeBetweenShots;
+        shotCounter =  allGuns[selectedGun].timeBetweenShots;
 
-        heatCounter += heatPerShot;
+        heatCounter += allGuns[selectedGun].heatPerShot;
 
         if(heatCounter >= maxHeatValue)
         {
