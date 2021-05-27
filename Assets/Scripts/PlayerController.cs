@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     // bullets
     public GameObject bulletImpact;
+    public float bulletImpactSurvialTime = 5f;
     public float bulletZFightingOffset = 0.3f;
     public float timeBetweenShots = 0.1f;
     private float shotCounter;
@@ -163,6 +164,8 @@ public class PlayerController : MonoBehaviour
                 heatCounter = 0f;
 
                 overheated = false;
+
+                UIController.instance.overheatedMessage.gameObject.SetActive(false);
             }
         }
 
@@ -191,26 +194,23 @@ public class PlayerController : MonoBehaviour
 
             GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point + (hit.normal * bulletZFightingOffset), Quaternion.LookRotation(hit.normal, Vector3.up));
 
-            Destroy(bulletImpactObject, 5f);
+            Destroy(bulletImpactObject, bulletImpactSurvialTime);
 
         }
 
         shotCounter = timeBetweenShots;
 
         heatCounter += heatPerShot;
-        
+
         if(heatCounter >= maxHeatValue)
         {
             heatCounter = maxHeatValue;
 
             overheated = true;
+
+            UIController.instance.overheatedMessage.gameObject.SetActive(true);
         }
-
-
     }
-
-
-
 
     private void LateUpdate() 
     {
