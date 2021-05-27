@@ -107,6 +107,17 @@ public class PlayerController : MonoBehaviour
 
         charCon.Move(movement * Time.deltaTime);
 
+        if(Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+
+
+
+        }
+
+
+
+
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
@@ -120,8 +131,29 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+    }
+
+    private void Shoot()
+    {
+        // Shoot out a ray from the middle of the screen
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        ray.origin = transform.position;
+
+        if(Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Debug.Log("We hit " + hit.collider.gameObject.name);
+
+
+        }
+
+
+
+
 
     }
+
+
+
 
     private void LateUpdate() 
     {
