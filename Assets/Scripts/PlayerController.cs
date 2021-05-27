@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
     private float heatCounter;
     private bool overheated;
 
+    public Gun[] allGuns;
+    private int selectedGun;
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +54,11 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main;
 
         UIController.instance.weaponTempSlider.maxValue = maxHeatValue;
+
+        selectedGun = 0;
+        SwitchGun(selectedGun);
+
+        
     }
 
     // Update is called once per frame
@@ -178,7 +186,26 @@ public class PlayerController : MonoBehaviour
 
         UIController.instance.weaponTempSlider.value = heatCounter;
 
+        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
+        {
+            selectedGun++;
 
+            if(selectedGun >= allGuns.Length)
+            {
+                selectedGun = 0;
+            }
+            SwitchGun(selectedGun);
+        }
+        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
+        {
+            selectedGun--;
+
+            if(selectedGun <= 0)
+            {
+                selectedGun = allGuns.Length - 1;
+            }
+            SwitchGun(selectedGun);
+        }
 
 
 
@@ -230,8 +257,17 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmosSelected() 
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, groundCheckPoint.position + new Vector3(0f, -2f, 0f));
+        Gizmos.DrawLine(transform.position, groundCheckPoint.position + new Vector3(0f, -2f, 0f));  
+    }
 
-        
+    private void SwitchGun(int selectedGun)
+    {
+        foreach (Gun gun in allGuns)
+        {
+            gun.gameObject.SetActive(false);
+        }
+
+        allGuns[selectedGun].gameObject.SetActive(true);
+
     }
 }
