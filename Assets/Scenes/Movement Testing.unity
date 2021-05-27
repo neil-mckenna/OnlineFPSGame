@@ -1401,6 +1401,8 @@ MonoBehaviour:
   moveSpeed: 5
   runSpeed: 12
   charCon: {fileID: 1648566307}
+  jumpForce: 12
+  gravityMod: 2.5
 --- !u!1 &1691198221
 GameObject:
   m_ObjectHideFlags: 0

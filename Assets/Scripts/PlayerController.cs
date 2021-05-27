@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     // Camera
     private Camera cam;
 
+    public float jumpForce = 12f;
+    public float gravityMod = 2.5f;
+
     
 
     // Start is called before the first frame update
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
 
@@ -75,17 +78,23 @@ public class PlayerController : MonoBehaviour
         // local var 
         float yVel = movement.y;
 
-        // normalisez move speed in 4 directions
+        // normalized move speed in 4 directions
         movement = ((transform.forward * moveDirection.z)  +  (transform.right * moveDirection.x)).normalized * activeMoveSpeed;
         movement.y = yVel;
 
-        if(!charCon.isGrounded)
+        if(charCon.isGrounded)
         {
             //movement.y =  yVel;
             movement.y = 0f;
         }
 
-        movement.y += Physics.gravity.y * Time.deltaTime; 
+        if(Input.GetButtonDown("Jump"))
+        {
+            movement.y = jumpForce;
+
+        }
+
+        movement.y += Physics.gravity.y * Time.deltaTime * gravityMod; 
 
         charCon.Move(movement * Time.deltaTime);
 
