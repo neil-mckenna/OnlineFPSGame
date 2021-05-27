@@ -982,7 +982,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c64e8f0a8e9195cb29a8b70184a3bf2b, type: 2}
+  - {fileID: 2100000, guid: 3ad765116bd39f740a9d98ad1f8a9e97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1426,6 +1426,8 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  bulletImpact: {fileID: 3091164734535326958, guid: a1972d54d7ef136baabd7ea59bfcbe2b, type: 3}
+  bulletZFightingOffset: 0.43
 --- !u!1 &1665645028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1452,8 +1454,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665645028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.282, y: -0.3, z: 0.092}
-  m_LocalScale: {x: 0.16210939, y: -0.10131, z: 1.6656}
+  m_LocalPosition: {x: 0.18, y: -0.3, z: 0.092}
+  m_LocalScale: {x: 0.14737527, y: -0.10131, z: 2.3759782}
   m_Children: []
   m_Father: {fileID: 298600396}
   m_RootOrder: 0

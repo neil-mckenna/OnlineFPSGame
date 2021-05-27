@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     public LayerMask groundLayers;
 
+    // bullets
+    public GameObject bulletImpact;
+    public float bulletZFightingOffset = 0.3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +44,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
 
@@ -107,17 +111,6 @@ public class PlayerController : MonoBehaviour
 
         charCon.Move(movement * Time.deltaTime);
 
-        if(Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-
-
-
-        }
-
-
-
-
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
@@ -131,6 +124,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+
+        }
+
+
+
+
+        
+
     }
 
     private void Shoot()
@@ -143,6 +147,9 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("We hit " + hit.collider.gameObject.name);
 
+            GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point + (hit.normal * bulletZFightingOffset), Quaternion.LookRotation(hit.normal, Vector3.up));
+
+            Destroy(bulletImpactObject, 5f);
 
         }
 
