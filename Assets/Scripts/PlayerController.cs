@@ -21,10 +21,16 @@ public class PlayerController : MonoBehaviour
     // Camera
     private Camera cam;
 
+    // Jump
     public float jumpForce = 12f;
     public float gravityMod = 2.5f;
+    public float rayCastJumpCheck = 1f;
 
-    
+
+    // raycast
+    public Transform groundCheckPoint;
+    private bool isGrounded;
+    public LayerMask groundLayers;
 
     // Start is called before the first frame update
     void Start()
@@ -88,7 +94,10 @@ public class PlayerController : MonoBehaviour
             movement.y = 0f;
         }
 
-        if(Input.GetButtonDown("Jump"))
+        //Debug.Log(Physics.Raycast(groundCheckPoint.position, Vector3.down, 0.25f, groundLayers));
+        isGrounded = Physics.Raycast(groundCheckPoint.position, Vector3.down, rayCastJumpCheck, groundLayers);
+
+        if(Input.GetButtonDown("Jump") && isGrounded)
         {
             movement.y = jumpForce;
 
@@ -105,5 +114,13 @@ public class PlayerController : MonoBehaviour
         cam.transform.position = viewPoint.transform.position;
         cam.transform.rotation = viewPoint.transform.rotation;
 
+    }
+
+    private void OnDrawGizmosSelected() 
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, groundCheckPoint.position + new Vector3(0f, -2f, 0f));
+
+        
     }
 }
