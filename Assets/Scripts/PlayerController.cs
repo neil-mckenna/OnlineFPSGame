@@ -190,13 +190,17 @@ public class PlayerController : MonoBehaviour
     {
         // Shoot out a ray from the middle of the screen
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        ray.origin = transform.position;
+        
+        //Debug.LogWarning("ray pos" + ray.origin + "transform " + transform.position);
+        Vector3 rayOffset = transform.position + new Vector3(0f, (1.1f * 0.5f), 0f);
+        
+        ray.origin = rayOffset;
 
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             Debug.Log("We hit " + hit.collider.gameObject.name);
 
-            GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point + (hit.normal * bulletZFightingOffset), Quaternion.LookRotation(hit.normal, Vector3.up));
+            GameObject bulletImpactObject =  Instantiate(bulletImpact, hit.point /* + (hit.normal * bulletZFightingOffset)*/, Quaternion.LookRotation(hit.normal, Vector3.up));
 
             Destroy(bulletImpactObject, bulletImpactSurvialTime);
 
