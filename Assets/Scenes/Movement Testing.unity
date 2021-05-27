@@ -1428,6 +1428,11 @@ MonoBehaviour:
     m_Bits: 64
   bulletImpact: {fileID: 3091164734535326958, guid: a1972d54d7ef136baabd7ea59bfcbe2b, type: 3}
   bulletZFightingOffset: 0.43
+  timeBetweenShots: 0.1
+  maxHeatValue: 10
+  heatPerShot: 1
+  coolRate: 4
+  overheatCoolRate: 5
 --- !u!1 &1665645028
 GameObject:
   m_ObjectHideFlags: 0
