@@ -25,11 +25,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     [Header("Error Settings")]
     public GameObject errorScreen;
     public TMP_Text errorText;
+
     [Header("Browser Settings")]
     public GameObject roomBrowserScreen;
     public RoomButton theRoomButton;
     public GameObject buttonContentParent;
-    public List<RoomButton> allRoomButtons = new List<RoomButton>();
+    private List<RoomButton> allRoomButtons = new List<RoomButton>();
+
+    [Header("Player Name Settings")]
+    public GameObject nameInputScreen;
+    public TMP_InputField nameInput;
+    private bool hasSetNickName;
 
 
     private void Awake() 
@@ -56,6 +62,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomScreen.SetActive(false);
         errorScreen.SetActive(false);
         roomBrowserScreen.SetActive(false);
+        nameInputScreen.SetActive(false);
     }
 
     public override void OnConnectedToMaster()
@@ -73,6 +80,22 @@ public class Launcher : MonoBehaviourPunCallbacks
         menuButtons.SetActive(true);
 
         PhotonNetwork.NickName = Random.Range(0, 1000).ToString();
+
+        if(!hasSetNickName)
+        {
+            CloseMenus();
+            nameInputScreen.SetActive(true);
+
+            if(PlayerPrefs.HasKey("playerName"))
+            {
+                nameInput.text = PlayerPrefs.GetString("playerName");
+            }
+
+        }
+        else
+        {
+            PhotonNetwork.NickName = PlayerPrefs.GetString("playerName");
+        }
     }
 
     public void OpenRoomCreate()
@@ -240,6 +263,22 @@ public class Launcher : MonoBehaviourPunCallbacks
             {
                 Debug.LogWarning(allRoomButtons[i].name);
             }
+        }
+    }
+
+    public void SetNickName()
+    {
+        if(!string.IsNullOrEmpty(nameInput.text))
+        {
+            PhotonNetwork.NickName = nameInput.text;
+
+            PlayerPrefs.SetString("playerName", nameInput.text);
+
+            CloseMenus();
+            menuButtons.SetActive(true);
+
+            hasSetNickName = true;
+
         }
     }
 
