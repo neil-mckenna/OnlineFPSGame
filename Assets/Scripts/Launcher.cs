@@ -25,13 +25,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     [Header("Browser Settings")]
     public GameObject roomBrowserScreen;
     public RoomButton theRoomButton;
-    private List<RoomButton> allRoomButtons = new List<RoomButton>();
+    public GameObject buttonContentParent;
+    public List<RoomButton> allRoomButtons = new List<RoomButton>();
 
 
     private void Awake() 
     {
-        instance = this;    
-    
+        instance = this;     
     }
 
     private void Start() 
@@ -83,7 +83,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             RoomOptions options = new RoomOptions();
             options.MaxPlayers = 8;
-
+            // options.IsVisible = true;
+            // options.IsOpen = true;
 
             PhotonNetwork.CreateRoom(roomNameInput.text, options);
 
@@ -92,6 +93,10 @@ public class Launcher : MonoBehaviourPunCallbacks
             loadingScreen.SetActive(true);
 
         }
+        else
+        {
+            Debug.LogWarning("room name details " + roomNameInput.text);
+        }
     }
 
     public override void OnJoinedRoom()
@@ -99,8 +104,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         CloseMenus();
         roomScreen.SetActive(true);
 
-        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
-
+        roomNameText.text = PhotonNetwork.CurrentRoom.Name; 
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -148,32 +152,55 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        
+        // destroy all previous buttons
         foreach (RoomButton rb in allRoomButtons)
         {
             Destroy(rb.gameObject);
             
         }
+        // clear the list
         allRoomButtons.Clear();
-
+        
+        // hide the button prefab 
         theRoomButton.gameObject.SetActive(false);
 
         for(int i = 0; i < roomList.Count; i++)
         {
+
+            Debug.Log(roomList.Count + " Rooms");
+
             if(roomList[i].PlayerCount != roomList[i].MaxPlayers && !roomList[i].RemovedFromList)
             {
-                RoomButton newButton = Instantiate(theRoomButton, theRoomButton.transform.parent);
-                
+                RoomButton newButton = Instantiate(theRoomButton, buttonContentParent.transform);
+            
                 newButton.SetButtonDetails(roomList[i]);
                 newButton.gameObject.SetActive(true);
 
                 allRoomButtons.Add(newButton);
 
             }
-
-
+            else
+            {
+                Debug.LogWarning(allRoomButtons[i].name);
+            }
         }
+    }
 
+    public void JoinRoom(RoomInfo inputInfo)
+    {
+        
+        CloseMenus();
+        loadingText.text = "Joining Room " + inputInfo.Name;
+        loadingScreen.SetActive(true);
 
+        PhotonNetwork.JoinRoom(inputInfo.Name);
+
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
 
