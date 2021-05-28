@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -37,6 +38,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public TMP_InputField nameInput;
     private bool hasSetNickName;
 
+    [Header("Level Settings")]
+    public string levelToPlay;
+    public GameObject startButton;
+
 
     private void Awake() 
     {
@@ -69,6 +74,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
 
         PhotonNetwork.JoinLobby();
+
+        PhotonNetwork.AutomaticallySyncScene = true;
 
         loadingText.text = "Joining Lobby...";
 
@@ -134,7 +141,16 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
-        ListAllPlayers(); 
+        ListAllPlayers();
+
+        if(PhotonNetwork.IsMasterClient)
+        {
+            startButton.SetActive(true);
+        }
+        else
+        {
+            startButton.SetActive(false);
+        } 
     }
 
     private void ListAllPlayers()
@@ -281,6 +297,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         }
     }
+
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel(levelToPlay);
+    }
+
 
     
 
