@@ -303,7 +303,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(levelToPlay);
     }
 
-    public override void OnMasterCLientSwitched(Player newMasteClient)
+    public override void OnMasterClientSwitched(Player newMasteClient)
     {
         if(PhotonNetwork.IsMasterClient)
         {
