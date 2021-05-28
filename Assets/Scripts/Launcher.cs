@@ -16,6 +16,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     [Header("Create Room")]
     public GameObject createRoomScreen;
     public TMP_InputField roomNameInput;
+    [Header("Room Settings")]
+    public GameObject roomScreen;
+    public TMP_Text roomNameText;
 
 
     private void Awake() 
@@ -40,6 +43,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         loadingScreen.SetActive(false);
         menuButtons.SetActive(false);
         createRoomScreen.SetActive(false);
+        roomScreen.SetActive(false);
     }
 
     public override void OnConnectedToMaster()
@@ -79,8 +83,20 @@ public class Launcher : MonoBehaviourPunCallbacks
             loadingScreen.SetActive(true);
 
         }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        CloseMenus();
+        roomScreen.SetActive(true);
+
+        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+
 
     }
+
+
 
 
 
