@@ -137,6 +137,20 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        TMP_Text newPlayerLabel = Instantiate(playerNameLabel, playerNameContentParent.transform);
+        newPlayerLabel.text = newPlayer.NickName;
+        newPlayerLabel.gameObject.SetActive(true);
+
+        allPlayerNames.Add(newPlayerLabel);
+    }
+
+    public override void OnPlayerLeftRoom(Player newPlayer)
+    {
+        ListAllPlayers();
+    }
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         errorText.text = "Failed to Create Room: " + message;
