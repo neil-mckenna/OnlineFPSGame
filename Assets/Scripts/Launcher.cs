@@ -18,7 +18,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public TMP_InputField roomNameInput;
     [Header("Room Settings")]
     public GameObject roomScreen;
-    public TMP_Text roomNameText;
+    public TMP_Text roomNameText, playerNameLabel;
+    public GameObject playerNameContentParent;
+    private List<TMP_Text> allPlayerNames = new List<TMP_Text>();
+    
     [Header("Error Settings")]
     public GameObject errorScreen;
     public TMP_Text errorText;
@@ -68,6 +71,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         CloseMenus();
         menuButtons.SetActive(true);
+
+        PhotonNetwork.NickName = Random.Range(0, 1000).ToString();
     }
 
     public void OpenRoomCreate()
@@ -104,7 +109,32 @@ public class Launcher : MonoBehaviourPunCallbacks
         CloseMenus();
         roomScreen.SetActive(true);
 
-        roomNameText.text = PhotonNetwork.CurrentRoom.Name; 
+        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+        ListAllPlayers(); 
+    }
+
+    private void ListAllPlayers()
+    {
+        foreach(TMP_Text player in allPlayerNames)
+        {
+            if(player == null){ continue; }
+            Destroy(player.gameObject);
+        }
+        allPlayerNames.Clear();
+
+        Player[] players = PhotonNetwork.PlayerList;
+
+        for(int i = 0; i < players.Length; i++)
+        {
+            TMP_Text newPlayerLabel = Instantiate(playerNameLabel, playerNameContentParent.transform);
+
+            newPlayerLabel.text = players[i].NickName;
+            newPlayerLabel.gameObject.SetActive(true);
+
+            allPlayerNames.Add(newPlayerLabel); 
+        }
+
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -119,6 +149,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         CloseMenus();
         menuButtons.SetActive(true);
+
+    }
+
+    public void JoinRoom(RoomInfo inputInfo)
+    {
+        
+        CloseMenus();
+        loadingText.text = "Joining Room " + inputInfo.Name;
+        loadingScreen.SetActive(true);
+
+        PhotonNetwork.JoinRoom(inputInfo.Name);
 
     }
 
@@ -156,6 +197,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         // destroy all previous buttons
         foreach (RoomButton rb in allRoomButtons)
         {
+            if(rb == null) { continue; }
             Destroy(rb.gameObject);
             
         }
@@ -187,16 +229,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-    public void JoinRoom(RoomInfo inputInfo)
-    {
-        
-        CloseMenus();
-        loadingText.text = "Joining Room " + inputInfo.Name;
-        loadingScreen.SetActive(true);
-
-        PhotonNetwork.JoinRoom(inputInfo.Name);
-
-    }
+    
 
     public void QuitGame()
     {
