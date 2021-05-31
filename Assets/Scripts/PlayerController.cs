@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
 
-
+                hit.collider.gameObject.GetPhotonView().RPC(nameof(DealDamage), RpcTarget.All, photonView.Owner.NickName);
             }
             else
             {
@@ -294,6 +294,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
         muzzleCounter = muzzleDisplayTime;
         
         
+    }
+
+    [PunRPC]
+    public void DealDamage(string damager)
+    {
+        TakeDamage(damager);
+    }
+
+    public void TakeDamage(string damager)
+    {
+
+        Debug.Log(photonView.Owner.NickName + " has been hit by " + damager);
+        gameObject.SetActive(false);
+
     }
 
     private void LateUpdate() 
