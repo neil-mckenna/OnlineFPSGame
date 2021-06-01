@@ -18,6 +18,8 @@ public class UIController : MonoBehaviour
     public TMP_Text deathsText;
     public GameObject leaderboard;
     public LeaderboardPlayer leaderboardPlayerDisplay;
+
+    public GameObject endScreen;
     
 
     // Start is called before the first frame update

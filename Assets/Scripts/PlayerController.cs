@@ -272,6 +272,27 @@ public class PlayerController : MonoBehaviourPunCallbacks
         anim.SetBool("grounded", isGrounded);
         anim.SetFloat("speed", moveDirection.magnitude);
 
+    }
+
+    private void LateUpdate() 
+    {
+        if(photonView.IsMine)
+        {
+            if(MatchManager.instance.state == MatchManager.GameState.Playing)
+            {
+                cam.transform.position = viewPoint.transform.position;
+                cam.transform.rotation = viewPoint.transform.rotation;
+            }
+            else
+            {
+                cam.transform.position = MatchManager.instance.mapCamPoint.position;
+                cam.transform.rotation = MatchManager.instance.mapCamPoint.rotation;
+            }
+            
+
+        }
+
+
         
 
     }
@@ -366,17 +387,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     }
 
-    private void LateUpdate() 
-    {
-        if(photonView.IsMine)
-        {
-            cam.transform.position = viewPoint.transform.position;
-            cam.transform.rotation = viewPoint.transform.rotation;
-
-        }
-        
-
-    }
+    
 
     private void OnDrawGizmosSelected() 
     {
