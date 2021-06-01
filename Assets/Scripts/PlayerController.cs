@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     [Header("Player Animation")]
     public Animator anim;
+    public GameObject playerModel;
+    public Transform modelGunPoint, gunHolder;
 
 
     // Start is called before the first frame update
@@ -66,14 +68,26 @@ public class PlayerController : MonoBehaviourPunCallbacks
         cam = Camera.main;
 
         UIController.instance.weaponTempSlider.maxValue = maxHeatValue;
-        UIController.instance.currentHPSlider.maxValue = maxHealth;
+        
 
         selectedGun = 0;
         SwitchGun(selectedGun);
 
         currentHP = maxHealth;
 
-        
+        if(photonView.IsMine)
+        {
+            playerModel.SetActive(false);
+
+            UIController.instance.currentHPSlider.maxValue = maxHealth;
+            UIController.instance.currentHPSlider.value = currentHP;
+        }
+        else
+        {
+            gunHolder.parent = modelGunPoint;
+            gunHolder.localPosition = Vector3.zero;
+            gunHolder.localRotation = Quaternion.identity;
+        }
 
         // Transform newTrans = SpawnManager.instance.GetSpawnPoint();
         // transform.position = newTrans.position;
