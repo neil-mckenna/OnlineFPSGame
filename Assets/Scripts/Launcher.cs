@@ -36,7 +36,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [Header("Player Name Settings")]
     public GameObject nameInputScreen;
     public TMP_InputField nameInput;
-    private bool hasSetNickName;
+    public static bool hasSetNickName;
 
     [Header("Level Settings")]
     public string levelToPlay;
@@ -63,6 +63,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 #if UNITY_EDITOR
     roomTestButton.SetActive(true);
 #endif
+
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true; 
         
     }
 
