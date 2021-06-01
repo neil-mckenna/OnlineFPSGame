@@ -297,7 +297,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
                 //Debug.Log("Current damage " + allGuns[selectedGun] + " / " + allGuns[selectedGun].shotDamage);
 
-                hit.collider.gameObject.GetPhotonView().RPC(nameof(DealDamage), RpcTarget.All, photonView.Owner.NickName, allGuns[selectedGun].shotDamage);
+                hit.collider.gameObject.GetPhotonView().RPC(
+                    nameof(DealDamage), 
+                    RpcTarget.All, 
+                    photonView.Owner.NickName, 
+                    allGuns[selectedGun].shotDamage,
+                    PhotonNetwork.LocalPlayer.ActorNumber);
             }
             else
             {
@@ -332,12 +337,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void DealDamage(string damager, int damageAmount)
+    public void DealDamage(string damager, int damageAmount, int actor)
     {
-        TakeDamage(damager, damageAmount);
+        TakeDamage(damager, damageAmount, actor);
     }
 
-    public void TakeDamage(string damager, int damageAmount)
+    public void TakeDamage(string damager, int damageAmount, int actor)
     {
         if(photonView.IsMine)
         {
@@ -348,6 +353,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 currentHP  = 0;
                 
                 PlayerSpawner.instance.Die(damager);
+
+                // 1 kill
+                MatchManager.instance.UpdateStatsSend(actor, 0, 1);
 
             }
 

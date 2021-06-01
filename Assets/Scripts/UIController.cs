@@ -12,6 +12,10 @@ public class UIController : MonoBehaviour
     public Slider currentHPSlider;
     public GameObject deathScreen;
     public TMP_Text deathScreenText;
+
+    [Header("Kills & Deaths Scores")]
+    public TMP_Text killsText;
+    public TMP_Text deathsText;
     
 
     // Start is called before the first frame update

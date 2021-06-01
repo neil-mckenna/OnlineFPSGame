@@ -12,7 +12,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         NewPlayer,
         ListPlayers,
-        ChangeStat,
+        UpdateStat,
 
     }
 
@@ -68,7 +68,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 
                 break;
 
-                case EventCodes.ChangeStat:
+                case EventCodes.UpdateStat:
 
                     UpdateStatsRecieve(data);
 
@@ -174,14 +174,77 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-    public void UpdateStatsSend()
+    public void UpdateStatsSend(int actorSending, int statToUpdate, int amountToChange)
     {
+        object[] package = new object[] { actorSending, statToUpdate, amountToChange };
+
+        PhotonNetwork.RaiseEvent(
+            (byte)EventCodes.UpdateStat,
+            package,
+            new RaiseEventOptions { Receivers = ReceiverGroup.All },
+            new SendOptions { Reliability = true }
+        );
 
 
     }
     public void UpdateStatsRecieve(object[] dataRecieved)
     {
+        int actor = (int)dataRecieved[0];
+        int statType = (int)dataRecieved[1];
+        int amount = (int)dataRecieved[2];
+
+        for(int i = 0; i < allPlayers.Count; i++)
+        {
+            if(allPlayers[i].actor == actor)
+            {
+                switch(statType)
+                {
+                    // kills
+                    case 0:
+                        allPlayers[i].kills += amount;
+                        Debug.LogWarning("Player" + allPlayers[i].name + " : kills " + allPlayers[i].kills);
+                    break;
+
+                    // deaths
+                    case 1:
+                        allPlayers[i].deaths += amount;
+                        Debug.LogWarning("Player" + allPlayers[i].name + " : deaths " + allPlayers[i].deaths);
+                    break;
+
+                    default:
+                    break;
+                }
+
+                if(i == index)
+                {
+                    UpdateStatDisplay();
+
+                }
+
+                break;
+
+            }
+
+        }
+
         
+        
+    }
+
+    public void UpdateStatDisplay()
+    {
+        if(allPlayers.Count > index)
+        {
+            UIController.instance.killsText.text = "Kills: " + allPlayers[index].kills;
+            UIController.instance.deathsText.text = "Deaths: " + allPlayers[index].deaths;
+
+        }
+        else
+        {
+            UIController.instance.killsText.text = "Kills: 0";
+            UIController.instance.deathsText.text = "Deaths: 0";
+
+        }
     }
 
 
