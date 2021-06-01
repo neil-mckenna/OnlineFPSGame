@@ -63,11 +63,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         cam = Camera.main;
 
         UIController.instance.weaponTempSlider.maxValue = maxHeatValue;
+        UIController.instance.currentHPSlider.maxValue = maxHealth;
 
         selectedGun = 0;
         SwitchGun(selectedGun);
 
         currentHP = maxHealth;
+
+        
 
         // Transform newTrans = SpawnManager.instance.GetSpawnPoint();
         // transform.position = newTrans.position;
@@ -244,6 +247,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             }
 
+            UIController.instance.currentHPSlider.value = currentHP;
+
         }
 
 
@@ -269,6 +274,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
 
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
+
+                Debug.Log("Current damage " + allGuns[selectedGun] + " / " + allGuns[selectedGun].shotDamage);
 
                 hit.collider.gameObject.GetPhotonView().RPC(nameof(DealDamage), RpcTarget.All, photonView.Owner.NickName, allGuns[selectedGun].shotDamage);
             }
@@ -307,6 +314,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void DealDamage(string damager, int damageAmount)
     {
+        Debug.Log("RPC passed in damage " + damageAmount);
         TakeDamage(damager, damageAmount);
     }
 
@@ -320,10 +328,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if(currentHP <= 0 )
             {
                 currentHP  = 0;
-
+                
                 PlayerSpawner.instance.Die(damager);
 
             }
+
+            UIController.instance.currentHPSlider.value = currentHP;
+
         }
 
 
