@@ -55,6 +55,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public int maxHealth = 100;
     private int currentHP;
 
+    [Header("Player Animation")]
+    public Animator anim;
+
 
     // Start is called before the first frame update
     void Start()
@@ -251,6 +254,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         }
 
+
+
+        anim.SetBool("grounded", isGrounded);
+        anim.SetFloat("speed", moveDirection.magnitude);
 
         
 
