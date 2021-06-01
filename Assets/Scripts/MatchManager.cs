@@ -54,11 +54,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 ShowLeaderboard();
 
             }
-            
-
         }
-        
-        
     }
 
     public void OnEvent(EventData photonEvent)
@@ -234,17 +230,18 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 if(i == index)
                 {
                     UpdateStatDisplay();
+                }
 
+                if(UIController.instance.leaderboard.activeInHierarchy)
+                {
+                    ShowLeaderboard();
                 }
 
                 break;
 
             }
 
-        }
-
-        
-        
+        }  
     }
 
     public void UpdateStatDisplay()
@@ -276,7 +273,9 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         UIController.instance.leaderboardPlayerDisplay.gameObject.SetActive(false);
 
-        foreach(PlayerInfo player in allPlayers)
+        List<PlayerInfo> sorted = SortPlayers(allPlayers);
+
+        foreach(PlayerInfo player in sorted)
         {
             LeaderboardPlayer newPlayerDisplay = Instantiate(UIController.instance.leaderboardPlayerDisplay, UIController.instance.leaderboardPlayerDisplay.transform.parent);
 
@@ -288,8 +287,39 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         }
 
+    }
+
+    private List<PlayerInfo> SortPlayers(List<PlayerInfo> players)
+    {
+        List<PlayerInfo> sorted = new List<PlayerInfo>();
+
+        while(sorted.Count < players.Count)
+        {
+            int highest = -1;
+
+            PlayerInfo selectPlayer = players[0];
+            
+            foreach(PlayerInfo player in players)
+            {
+                if(!sorted.Contains(player))
+                {
+                    if(player.kills > highest)
+                    {   
+                        selectPlayer = player;
+                        highest = player.kills;
+                    }
+                }  
+            }
+
+            sorted.Add(selectPlayer);
+
+        }
 
 
+
+
+
+        return sorted;
     }
 
 
