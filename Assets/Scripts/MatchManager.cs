@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-
-
-
 public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public enum EventCodes : byte
@@ -16,6 +13,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
         NewPlayer,
         ListPlayers,
         UpdateStat,
+        NextMatch,
 
     }
 
@@ -39,6 +37,8 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public Transform mapCamPoint;
     public GameState state = GameState.Waiting;
     public float waitAfterEnding = 10f;
+
+    public bool perpetual = false;
 
     private void Awake() 
     {
@@ -104,6 +104,12 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                     UpdateStatsRecieve(data);
 
+                break;
+
+                case EventCodes.NextMatch:
+
+                    NextMatchRecieve();
+
                 break;  
 
                 default:
@@ -111,9 +117,6 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 break;
             }
         }
-
-
-
     }
 
     public override void OnEnable()
@@ -408,10 +411,61 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         yield return new WaitForSeconds(waitAfterEnding);
 
-        PhotonNetwork.AutomaticallySyncScene = false;
-        PhotonNetwork.LeaveRoom();
+        if(!perpetual)
+        {
+            PhotonNetwork.AutomaticallySyncScene = false;
+            PhotonNetwork.LeaveRoom();
+        }
+        else
+        {
+            if(PhotonNetwork.IsMasterClient)
+            {
+                NextMatchSend();
+            }
+
+        }
+
+        
     }
+
+    public void NextMatchSend()
+    {
+        PhotonNetwork.RaiseEvent(
+            (byte)EventCodes.NextMatch,
+            null,
+            new RaiseEventOptions { Receivers = ReceiverGroup.All },
+            new SendOptions { Reliability = true }
+        );
+
+    }
+
+    public void NextMatchReceive()
+    {
+        state = GameState.Playing;
+
+        UIController.instance.endScreen.SetActive(false);
+        UIController.instance.leaderboard.SetActive(false);
+
+        foreach(PlayerInfo player in allPlayers)
+        {
+            player.kills = 0;
+            player.deaths = 0;
+        }
+
+        UpdateStatDisplay();
+
+        PlayerSpawner.instance.SpawnPlayer();
+
+
+
+    }
+
+
+
 }
+
+
+
 
 [System.Serializable]
 public class PlayerInfo
