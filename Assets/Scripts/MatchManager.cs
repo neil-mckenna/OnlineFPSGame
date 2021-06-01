@@ -420,12 +420,27 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                NextMatchSend();
+                if(!Launcher.instance.changeMapBetweenRounds)
+                {
+                    NextMatchSend();
+                }
+                else
+                {
+                    int newLevel = Random.Range(0, Launcher.instance.allMaps.Length);
+
+                    if(Launcher.instance.allMaps[newLevel] == SceneManager.GetActiveScene().name)
+                    {
+                        NextMatchSend();
+                    }
+                    else
+                    {
+                        PhotonNetwork.LoadLevel(Launcher.instance.allMaps[newLevel]);
+                    }
+
+                }
+                
             }
-
-        }
-
-        
+        } 
     }
 
     public void NextMatchSend()
@@ -439,7 +454,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-    public void NextMatchReceive()
+    public void NextMatchRecieve()
     {
         state = GameState.Playing;
 
