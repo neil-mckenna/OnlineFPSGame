@@ -71,27 +71,26 @@ public class PlayerController : MonoBehaviourPunCallbacks
         
 
         selectedGun = 0;
-        SwitchGun(selectedGun);
+
+        photonView.RPC("SetGun", RpcTarget.All , selectedGun);
 
         currentHP = maxHealth;
 
         if(photonView.IsMine)
         {
-            playerModel.SetActive(false);
+            //playerModel.SetActive(false);
 
             UIController.instance.currentHPSlider.maxValue = maxHealth;
             UIController.instance.currentHPSlider.value = currentHP;
         }
         else
         {
+            playerModel.SetActive(true);
+
             gunHolder.parent = modelGunPoint;
             gunHolder.localPosition = Vector3.zero;
             gunHolder.localRotation = Quaternion.identity;
         }
-
-        // Transform newTrans = SpawnManager.instance.GetSpawnPoint();
-        // transform.position = newTrans.position;
-        // transform.rotation = newTrans.rotation;
 
         
         
@@ -241,7 +240,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     selectedGun = 0;
                 }
-                SwitchGun(selectedGun);
+                photonView.RPC("SetGun", RpcTarget.All , selectedGun);
             }
             else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
             {
@@ -251,7 +250,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     selectedGun = allGuns.Length - 1;
                 }
-                SwitchGun(selectedGun);
+                photonView.RPC("SetGun", RpcTarget.All , selectedGun);
             }
 
             for(int i = 0; i < allGuns.Length; i++)
@@ -259,7 +258,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 if(Input.GetKeyDown((i + 1).ToString()))
                 {
                     selectedGun = i;
-                    SwitchGun(i);
+                    photonView.RPC("SetGun", RpcTarget.All , i);
                 }
 
             }
@@ -291,12 +290,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if(hit.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
+                //Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
 
 
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
 
-                Debug.Log("Current damage " + allGuns[selectedGun] + " / " + allGuns[selectedGun].shotDamage);
+                //Debug.Log("Current damage " + allGuns[selectedGun] + " / " + allGuns[selectedGun].shotDamage);
 
                 hit.collider.gameObject.GetPhotonView().RPC(nameof(DealDamage), RpcTarget.All, photonView.Owner.NickName, allGuns[selectedGun].shotDamage);
             }
@@ -335,7 +334,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void DealDamage(string damager, int damageAmount)
     {
-        Debug.Log("RPC passed in damage " + damageAmount);
         TakeDamage(damager, damageAmount);
     }
 
@@ -343,7 +341,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if(photonView.IsMine)
         {
-            //Debug.Log(photonView.Owner.NickName + " has been hit by " + damager);
 
             currentHP -= damageAmount;
             if(currentHP <= 0 )
@@ -389,6 +386,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
         allGuns[selectedGun].gameObject.SetActive(true);
 
         allGuns[selectedGun].muzzleFlash.SetActive(false);
+
+    }
+
+    [PunRPC]
+    public void SetGun(int gunToSwitchTo)
+    {
+        if(gunToSwitchTo < allGuns.Length)
+        {
+            selectedGun = gunToSwitchTo;
+            SwitchGun(selectedGun);
+        }
+
+
 
     }
 }
