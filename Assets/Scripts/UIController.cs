@@ -18,6 +18,7 @@ public class UIController : MonoBehaviour
     public TMP_Text deathsText;
     public GameObject leaderboard;
     public LeaderboardPlayer leaderboardPlayerDisplay;
+    public TMP_Text timerText;
 
     public GameObject endScreen;
     

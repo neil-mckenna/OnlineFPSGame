@@ -43,3 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd961f22ce858ed1adefdd663f33222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allPlayers: []
+  killsToWin: 5
+  mapCamPoint: {fileID: 0}
+  state: 0
+  waitAfterEnding: 10
+  perpetual: 1
+  matchLength: 180
