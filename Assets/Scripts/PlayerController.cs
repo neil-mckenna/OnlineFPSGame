@@ -60,6 +60,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public GameObject playerModel;
     public Transform modelGunPoint, gunHolder;
 
+    [Header("Skins")]
+    public Material[] allSkins;
+
 
     // Start is called before the first frame update
     void Start()
@@ -91,6 +94,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             gunHolder.localPosition = Vector3.zero;
             gunHolder.localRotation = Quaternion.identity;
         }
+
+        playerModel.GetComponentInChildren<Renderer>().material = allSkins[photonView.Owner.ActorNumber % allSkins.Length]; 
 
         
         

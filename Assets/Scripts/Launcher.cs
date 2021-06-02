@@ -264,6 +264,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+       
         
         // destroy all previous buttons
         foreach (RoomButton rb in allRoomButtons)

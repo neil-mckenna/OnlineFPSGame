@@ -539,7 +539,12 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         var timeToDisplay = System.TimeSpan.FromSeconds(currentMatchTime);
 
-        UIController.instance.timerText.text = timeToDisplay.Minutes.ToString("00") + ":" + timeToDisplay.Seconds.ToString("00");
+        if(UIController.instance != null)
+        {
+            UIController.instance.timerText.text = timeToDisplay.Minutes.ToString("00") + ":" + timeToDisplay.Seconds.ToString("00");
+
+        }
+        
 
     }
 
