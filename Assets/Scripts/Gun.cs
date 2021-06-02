@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour
     public GameObject muzzleFlash;
     public int shotDamage = 1;
     public float adsZoom;
+    public AudioSource shotSound;
 
 
 }
