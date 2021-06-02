@@ -264,8 +264,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        // my code to stop index out of range 
+        if(allRoomButtons.Count == 0)
+        {
+            return;
+        }
        
-        
         // destroy all previous buttons
         foreach (RoomButton rb in allRoomButtons)
         {
@@ -281,11 +285,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         for(int i = 0; i < roomList.Count; i++)
         {
-
-            Debug.Log(roomList.Count + " Rooms");
-
             if(roomList[i].PlayerCount != roomList[i].MaxPlayers && !roomList[i].RemovedFromList)
             {
+                Debug.LogWarning(i);
                 RoomButton newButton = Instantiate(theRoomButton, buttonContentParent.transform);
             
                 newButton.SetButtonDetails(roomList[i]);
@@ -297,7 +299,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             else
             {
                 Debug.LogWarning(allRoomButtons[i].name);
-            }
+            }   
         }
     }
 

@@ -135,25 +135,25 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
             {
                 case EventCodes.NewPlayer:
                     
-                    NewPlayerRecieve(data);
+                    NewPlayerReceive(data);
 
                 break;
 
                 case EventCodes.ListPlayers:
                     
-                    ListPlayersRecieve(data);
+                    ListPlayersReceive(data);
                 
                 break;
 
                 case EventCodes.UpdateStat:
 
-                    UpdateStatsRecieve(data);
+                    UpdateStatsReceive(data);
 
                 break;
 
                 case EventCodes.NextMatch:
 
-                    NextMatchRecieve();
+                    NextMatchReceive();
 
                 break;
                 case EventCodes.TimerSync:
@@ -198,7 +198,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-    public void NewPlayerRecieve(object[] dataRecieved)
+    public void NewPlayerReceive(object[] dataRecieved)
     {
         PlayerInfo player = new PlayerInfo((string)dataRecieved[0], (int)dataRecieved[1], (int)dataRecieved[2], (int)dataRecieved[3]);
 
@@ -235,7 +235,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
         );
     }
 
-    public void ListPlayersRecieve(object[] dataRecieved)
+    public void ListPlayersReceive(object[] dataRecieved)
     {
         allPlayers.Clear();
 
@@ -278,7 +278,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
 
     }
-    public void UpdateStatsRecieve(object[] dataRecieved)
+    public void UpdateStatsReceive(object[] dataRecieved)
     {
         int actor = (int)dataRecieved[0];
         int statType = (int)dataRecieved[1];
@@ -504,7 +504,7 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-    public void NextMatchRecieve()
+    public void NextMatchReceive()
     {
         state = GameState.Playing;
 
