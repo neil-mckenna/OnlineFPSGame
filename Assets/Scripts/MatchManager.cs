@@ -65,7 +65,11 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
             if(!PhotonNetwork.IsMasterClient)
             {
-                UIController.instance.timerText.gameObject.SetActive(false);
+                if(UIController.instance != null)
+                {
+                    UIController.instance.timerText.gameObject.SetActive(false);
+                }
+                
 
             }
         }
@@ -558,7 +562,11 @@ public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         UpdateTimerDisplay();
 
-        UIController.instance.timerText.gameObject.SetActive(true);
+        if(UIController.instance != null)
+        {
+            UIController.instance.timerText.gameObject.SetActive(true);
+        }
+        
 
     }
 

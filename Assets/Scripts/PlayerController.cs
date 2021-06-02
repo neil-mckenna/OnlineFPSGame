@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             else if(Cursor.lockState == CursorLockMode.None)
             {
-                if(Input.GetMouseButtonDown(0))
+                if(Input.GetMouseButtonDown(0) && !UIController.instance.optionsScreen.activeInHierarchy)
                 {
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -289,12 +289,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 cam.transform.rotation = MatchManager.instance.mapCamPoint.rotation;
             }
             
-
         }
-
-
-        
-
     }
 
     private void Shoot()
@@ -302,7 +297,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         // Shoot out a ray from the middle of the screen
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         
-        //Debug.LogWarning("ray pos" + ray.origin + "transform " + transform.position);
         Vector3 rayOffset = transform.position + new Vector3(0f, (1.1f * 0.5f), 0f);
         
         ray.origin = rayOffset;
@@ -311,12 +305,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if(hit.collider.gameObject.CompareTag("Player"))
             {
-                //Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
-
-
+                
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
-
-                //Debug.Log("Current damage " + allGuns[selectedGun] + " / " + allGuns[selectedGun].shotDamage);
 
                 hit.collider.gameObject.GetPhotonView().RPC(
                     nameof(DealDamage), 

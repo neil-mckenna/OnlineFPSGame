@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class UIController : MonoBehaviour
 {
-    public TMP_Text overheatedMessage  = null;
+    // SIngleton
     public static UIController instance;
+
+    // 
+    public TMP_Text overheatedMessage  = null;
     public Slider weaponTempSlider;
     public Slider currentHPSlider;
     public GameObject deathScreen;
@@ -21,6 +25,7 @@ public class UIController : MonoBehaviour
     public TMP_Text timerText;
 
     public GameObject endScreen;
+    public GameObject optionsScreen;
     
 
     // Start is called before the first frame update
@@ -28,6 +33,50 @@ public class UIController : MonoBehaviour
     {
         instance = this;
         
+    }
+
+    private void Update() 
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            ShowHideOptions();
+
+
+        }
+
+        if(optionsScreen.activeInHierarchy && Cursor.lockState != CursorLockMode.None) 
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+        }
+
+    }
+
+    public void ShowHideOptions()
+    {
+        if(!optionsScreen.activeInHierarchy)
+        {
+            optionsScreen.SetActive(true);
+        }
+        else
+        {
+            optionsScreen.SetActive(false);
+
+        }
+
+    }
+
+    public void ReturnToMainMenu()
+    {
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+
     }
 
 }
